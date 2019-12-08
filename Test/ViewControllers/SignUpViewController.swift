@@ -78,11 +78,11 @@ class SignUpViewController: UIViewController {
                     
                     let db = Firestore.firestore()
                     
-                    db.collection("Users").document(PlateNumber).setData(["First Name":firstName ,
-                                                                          "Last Name":lastName ,
+                    db.collection("Users").document((authresult?.user.uid)!).setData(["First_Name":firstName ,
+                                                                          "Last_Name":lastName ,
                                                                           "Email":email,
-                                                                          "Phone Number":PhoneNumber,
-                                                                          "Plate Number":PlateNumber,
+                                                                          "Phone_Number":PhoneNumber,
+                                                                          "Plate_Number":PlateNumber,
                                                                           "UID":authresult?.user.uid], merge: true){
                                                                             (error) in
                                                                             
@@ -95,6 +95,10 @@ class SignUpViewController: UIViewController {
                                                                             
                     }
                 
+                    
+                    self.ErrorLabel.text="Signup is successful !"
+                    
+                    
                 }
                     
                     
