@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
+//import FirebaseAuth
 
 class HomeScreenViewController: UIViewController {
     @IBOutlet weak var plateNumLabel: UILabel!
@@ -42,6 +42,7 @@ class HomeScreenViewController: UIViewController {
                 self.emailLabel.text = data?.get("Email") as? String
                 self.PhoneNumLabel.text = data?.get("Phone_Number") as? String
                 self.plateNumLabel.text = data?.get("Plate_Number") as? String
+                
                 self.finesCountLabel.text = data?.get("fines_count") as? String
 
 //                self.myTableVC.finesCount = Int( data!.get("fines_count") as! String)!

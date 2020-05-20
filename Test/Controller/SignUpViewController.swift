@@ -8,7 +8,8 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
+//import FirebaseAuth
+import Toast_Swift
 
 class SignUpViewController: UIViewController {
     
@@ -63,59 +64,78 @@ class SignUpViewController: UIViewController {
             let PhoneNumber = PhoneNumTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let PlateNumber = PlateNumberTextNumber.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let password = Pass1TextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            let fines_location_array:[String] = []
+            let fines_time_array : [String] = []
             
             
-            //Starting Firebase Auth
-            Auth.auth().createUser(withEmail: email, password: password) { (authresult, autherror) in
-                
-                
-                if autherror != nil{
-                    
-                    self.ErrorLabel.text = "Error Signing up"
-                    
-                }else{
-                    
-                    
-                    let db = Firestore.firestore()
-                    
-                    db.collection("Users").document((authresult?.user.uid)!).setData(["First_Name":firstName ,
-                                                                          "Last_Name":lastName ,
-                                                                          "Email":email,
-                                                                          "Phone_Number":PhoneNumber,
-                                                                          "Plate_Number":PlateNumber,
-                                                                          "UID":authresult?.user.uid], merge: true){
-                                                                            (error) in
-                                                                            
-                                                                            if error != nil {
-                                                                                // Show error message
-                                                                                self.ErrorLabel.text="error creating user , please try again."
-                                                                            }
-                                                                            
-                                                                            
-                                                                            
-                    }
-                
-                    
-                    self.ErrorLabel.text="Signup is successful !"
-                    
-                    
-                }
-                    
-                    
-                    
-                    
-                }
-                
-                
-                
+            let currentUserFine = fine(finesCount: 0, finesLocationsArray: [], finesTimesArray: [])
+            
+            let currentUser = User(firstName: firstName, lastName: lastName, email: email, phoneNumber: PhoneNumber, plateNumber: PlateNumber, userFine: currentUserFine)
             
             
+            CurrentUser.instance.setCurrentUser(currentUser: currentUser)
             
             
-        }else{
-            
-            print("Problem signing up")
-        }
+//
+//            //Starting Firebase Auth
+//            Auth.auth().createUser(withEmail: email, password: password) { (authresult, autherror) in
+//
+//
+//                if autherror != nil{
+//
+//                    self.ErrorLabel.text = "Error Signing up"
+//
+//                }else{
+//
+//                    let db = Firestore.firestore()
+////
+////
+////                    db.collection("Users").document((authresult?.user.uid)!).setData(["First_Name":firstName ,
+////                                                                          "Last_Name":lastName ,
+////                                                                          "Email":email,
+////                                                                          "Phone_Number":PhoneNumber,
+////                                                                          "Plate_Number":PlateNumber,
+////                                                                          "UID":authresult?.user.uid,
+////                                                                          "fines_location_array":fines_location_array,
+////                                                                          "fines_time":fines_time_array,
+////                                                                          "fines_count":"0"
+////                                                                          ],
+////                                                                                     merge: true){
+////                                                                            (error) in
+////
+////                                                                            if error != nil {
+////                                                                                // Show error message
+////                                                                                self.ErrorLabel.text="error creating user , please try again."
+////                                                                            }
+////
+////
+////
+////                    }
+//
+//                    print(CurrentUser.instance.currentUser)
+//
+////                    self.ErrorLabel.text="Signup is successful !"
+////                    let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "HomeLatest") as! NewHomeViewController
+////                    self.navigationController?.pushViewController(secondViewController, animated: true)
+//
+//
+//                }
+//
+//
+//
+//
+//                }
+//
+//
+//
+//
+//
+//
+//
+//        }else{
+//
+//            print("Problem signing up")
+       }
         
         
         
@@ -147,7 +167,7 @@ class SignUpViewController: UIViewController {
         Utilities.styleTextField(PhoneNumTextField)
         Utilities.styleTextField(Pass1TextField)
         Utilities.styleTextField(Pass2TextField)
-        Utilities.styleFilledButton(SignUpBtnO)
+        //Utilities.styleFilledButton(SignUpBtnO)
         
         
     }
@@ -170,6 +190,8 @@ class SignUpViewController: UIViewController {
         {
             
           errormessage = "Please check that you used all the fields"
+            self.view.makeToast("Please check that you used all the fields", duration:3.0 , position:.bottom)
+
             
         }
         else {
@@ -180,6 +202,8 @@ class SignUpViewController: UIViewController {
             }else{
                 
                 errormessage = "Please double check your password fields"
+                self.view.makeToast("Please double check your password fields", duration:3.0 , position:.bottom)
+
             }
             
            
